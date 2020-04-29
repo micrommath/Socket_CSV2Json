@@ -1,4 +1,4 @@
-package controllers;
+package cliente.controllers;
 
 import java.io.File;
 import java.net.URL;
@@ -6,6 +6,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
+import cliente.models.Conversao;
+import cliente.models.LogInformacoes;
+import cliente.models.TempoViewModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,9 +20,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
-import models.Conversao;
-import models.LogInformacoes;
-import models.TempoViewModel;
 
 public class InicialController implements Initializable { 
 

@@ -1,11 +1,11 @@
-package controllers;
+package cliente.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import models.Log;
-import models.LogInformacoes;
-import models.TempoViewModel;
+import cliente.models.Log;
+import cliente.models.LogInformacoes;
+import cliente.models.TempoViewModel;
 
 public class TemposController {
 

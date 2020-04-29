@@ -1,4 +1,4 @@
-package models;
+package cliente.models;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

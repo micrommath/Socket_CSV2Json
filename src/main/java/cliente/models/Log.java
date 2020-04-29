@@ -1,4 +1,4 @@
-package models;
+package cliente.models;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

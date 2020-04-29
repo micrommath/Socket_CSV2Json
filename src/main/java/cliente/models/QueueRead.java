@@ -1,19 +1,20 @@
-package models;
+package cliente.models;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class QueueParse {
+public class QueueRead {
 
-	private static BlockingQueue<Brasil> queueData;
+	private static BlockingQueue<String> queueData;
 	private static boolean terminatedAdd;
 	
-	public QueueParse(int capacity) {
-		queueData = new ArrayBlockingQueue<Brasil>(capacity);
+	
+	public QueueRead(int capacity) {
+		queueData = new ArrayBlockingQueue<String>(capacity);
 		terminatedAdd = false;
 	}
 
-	public static Brasil getData() {
+	public static String getData() {
 		try {
 			if (queueData.size() > 0)
 				return queueData.take();
@@ -25,7 +26,7 @@ public class QueueParse {
 		return null;
 	}
 
-	public static void addData(Brasil data) {
+	public static void addData(String data) {
 		try {
 			queueData.put(data);
 		} catch (InterruptedException e) {

@@ -1,4 +1,4 @@
-package models;
+package cliente.models;
 
 import javafx.concurrent.Task;
 

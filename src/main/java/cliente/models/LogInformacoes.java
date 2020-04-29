@@ -1,4 +1,4 @@
-package models;
+package cliente.models;
 
 public class LogInformacoes {
 

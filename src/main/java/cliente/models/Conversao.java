@@ -1,4 +1,4 @@
-package models;
+package cliente.models;
 
 import java.io.IOException;
 import java.nio.file.Files;

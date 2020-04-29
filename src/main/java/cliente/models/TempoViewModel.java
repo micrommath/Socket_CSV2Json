@@ -1,4 +1,4 @@
-package models;
+package cliente.models;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
