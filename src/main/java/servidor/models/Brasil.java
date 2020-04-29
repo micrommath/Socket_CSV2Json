@@ -1,4 +1,4 @@
-package cliente.models;
+package servidor.models;
 
 public class Brasil {
 	

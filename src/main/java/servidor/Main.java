@@ -16,9 +16,9 @@ public class Main {
 				System.out.println("[ Esperando por conexões.... ] ");
 				Socket cliente = server.accept();
 				System.out.print("[ OK ]\n");
+								
 				
-				
-				
+								
 			} while (true);
 
 		} catch (IOException e) {

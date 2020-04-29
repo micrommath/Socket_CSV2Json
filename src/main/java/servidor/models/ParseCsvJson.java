@@ -1,12 +1,15 @@
-package cliente.models;
+package servidor.models;
 
 import javafx.concurrent.Task;
+import servidor.models.interfaces.InterfaceFilaConversao;
+import servidor.models.interfaces.InterfaceFilaLeitura;
+import servidor.models.interfaces.InterfaceParse;
 
-public class Parse {
-	public Parse() {		
+public class ParseCsvJson implements InterfaceParse{
+	public ParseCsvJson() {		
 	}
 	
-	public Task<Void> getTask(int pBarIncrement, LogInformacoes logInformacoes){
+	public Task<Void> getTaskParse(int pBarIncrement, InterfaceFilaLeitura filaLeitura, InterfaceFilaConversao filaConversao){
 		
 		return new Task<Void>() {
 			@Override
@@ -17,11 +20,11 @@ public class Parse {
 
 				long tempoInicio = System.nanoTime();
 
-				while (QueueRead.getSize() > 0) {
+				while (filaLeitura.getSize() > 0) {
 
 					Brasil informacao = new Brasil();
 					String dado = "";
-					dado = QueueRead.getData();
+					dado = filaLeitura.desenfilerar();
 
 					String[] linha = dado.split(",");
 
@@ -55,7 +58,7 @@ public class Parse {
 						informacao.setCentimetros(linha[23]);
 						informacao.setGuid(linha[24]);
 
-						QueueParse.addData(informacao);
+						filaConversao.enfilerar(informacao);
 
 						contador++;
 
@@ -70,9 +73,8 @@ public class Parse {
 
 				long tempoFim = System.nanoTime();
 
-				long duration = (tempoFim - tempoInicio) / 1000000;
-				System.out.println("Conversão empo levado: " + duration + " milliseconds.");
-				logInformacoes.setParse(duration);
+				long duracao = (tempoFim - tempoInicio) / 1000000;
+				System.out.println("Conversão empo levado: " + duracao + " milliseconds.");				
 
 				return null;
 			}

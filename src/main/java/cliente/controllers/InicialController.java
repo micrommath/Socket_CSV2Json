@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
-import cliente.models.Conversao;
 import cliente.models.LogInformacoes;
 import cliente.models.TempoViewModel;
 import javafx.event.ActionEvent;
@@ -109,9 +108,11 @@ public class InicialController implements Initializable {
 			Path arquivoTempoLevado = Paths.get(System.getProperty("java.io.tmpdir") + "tempoCsvToJson.txt");
 			LogInformacoes logInformacoes = new LogInformacoes();
 
-			Conversao conversao = new Conversao();
-			conversao.realizarOperacoes(caminhoLeitura, caminhoGravacao, progBarLeitura, progBarConversao,
-					progBarGravacao, logInformacoes, arquivoTempoLevado);
+			/*
+			 * Conversao conversao = new Conversao();
+			 * conversao.realizarOperacoes(caminhoLeitura, caminhoGravacao, progBarLeitura,
+			 * progBarConversao, progBarGravacao, logInformacoes, arquivoTempoLevado);
+			 */
 
 		} else {
 			AlertaWarning(AlertType.WARNING ,"Arquivo", "Escolha um arquivo", "Escolha um arquivo válido para iniciar");

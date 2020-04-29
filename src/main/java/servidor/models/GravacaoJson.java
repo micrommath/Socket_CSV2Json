@@ -1,4 +1,4 @@
-package cliente.models;
+package servidor.models;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -10,13 +10,15 @@ import java.nio.file.StandardOpenOption;
 import com.google.gson.Gson;
 
 import javafx.concurrent.Task;
+import servidor.models.interfaces.InterfaceFilaConversao;
+import servidor.models.interfaces.InterfaceGravacao;
 
-public class Gravacao {
+public class GravacaoJson implements InterfaceGravacao{
 
-	public Gravacao () {		
+	public GravacaoJson () {		
 	}
 	
-	public Task<Void> getTask(int pBarIncrement, Path caminhoSalvar, LogInformacoes logInformacoes) {
+	public Task<Void> getTaskGravacao(int pBarIncrement, Path caminhoSalvar, InterfaceFilaConversao fila) {
 		
 		return new Task<Void>() {
 			@Override
@@ -30,9 +32,9 @@ public class Gravacao {
 
 					long tempoInicio = System.nanoTime();
 
-					while (QueueParse.getSize() > 0) {
+					while (fila.getSize() > 0) {
 
-						Brasil obj = QueueParse.getData();
+						Brasil obj = fila.desenfilerar();
 
 						Gson gson = new Gson();
 						String json = gson.toJson(obj);
@@ -53,9 +55,6 @@ public class Gravacao {
 
 					long duration = (tempoFim - tempoInicio) / 1000000;
 					System.out.println("Gravação tempo levado: " + duration + " milliseconds.");
-					logInformacoes.setGravacao(duration);
-
-					Log.GravarLog(logInformacoes);
 
 				} catch (IOException e) {
 					System.out.println(e.getStackTrace());
