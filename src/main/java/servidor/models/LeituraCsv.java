@@ -5,61 +5,48 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import javafx.concurrent.Task;
 import servidor.models.interfaces.InterfaceFilaLeitura;
-import servidor.models.interfaces.InterfaceLeitura;
 
-public class LeituraCsv implements InterfaceLeitura {
+public class LeituraCsv implements Runnable {
 
-	public LeituraCsv() {
-	}
+	private Path caminhoLeitura;
+	private InterfaceFilaLeitura filaLeitura;
+	
+	public LeituraCsv(Path caminhoLeitura, InterfaceFilaLeitura filaLeitura) {
+		this.caminhoLeitura = caminhoLeitura;
+		this.filaLeitura = filaLeitura;
+	}	
 
-	public Task<Void> getTaskLeitura(int totalLinhas, Path caminho, InterfaceFilaLeitura fila) {
+	@Override
+	public void run() {		
+		
+		try (BufferedReader reader = Files.newBufferedReader(caminhoLeitura)) {
+			boolean primeiraLinha = true;
 
-		return new Task<Void>() {
-			@Override
-			protected Void call() {
+			long tempoInicio = System.nanoTime();
 
-				try (BufferedReader reader = Files.newBufferedReader(caminho)) {
-					int contador = 0;
-					float acum = 0;
-					boolean primeiraLinha = true;
+			while (reader.ready()) {
+				
+				if (primeiraLinha) {
+					primeiraLinha = false;
 
-					long tempoInicio = System.nanoTime();
-
-					while (reader.ready()) {
-
-						if (primeiraLinha) {
-							primeiraLinha = false;
-
-							@SuppressWarnings("unused")
-							String linhaCabecalho = reader.readLine();
-							continue;
-						}
-
-						contador++;
-
-						if (contador == (totalLinhas / 100)) {
-							acum += 0.01F;
-							updateProgress(acum, 1);
-							contador = 0;
-						}
-
-						fila.enfilerar(reader.readLine());
-					}
-
-					long tempoFim = System.nanoTime();
-
-					long duration = (tempoFim - tempoInicio) / 1000000;
-					System.out.println("Leitura tempo levado: " + duration + " milliseconds.");
-					fila.setTerminou(true);
-
-				} catch (IOException e) {
-					e.printStackTrace();
+					@SuppressWarnings("unused")
+					String linhaCabecalho = reader.readLine();
+					continue;
 				}
-				return null;
+				
+				filaLeitura.enfilerar(reader.readLine());
 			}
-		};
 
+			long tempoFim = System.nanoTime();
+
+			long duration = (tempoFim - tempoInicio) / 1000000;
+			filaLeitura.setTerminou(true);
+			
+			System.out.println("Leitura tempo levado: " + duration + " milliseconds.");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 }
