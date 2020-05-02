@@ -3,30 +3,33 @@ package servidor.models;
 import servidor.models.interfaces.InterfaceFilaConversao;
 import servidor.models.interfaces.InterfaceFilaLeitura;
 
-public class ParseCsvJson implements Runnable{
+public class ParseCsvJson implements Runnable {
 	private InterfaceFilaLeitura filaLeitura;
 	private InterfaceFilaConversao filaConversao;
-	
-	
+
 	public ParseCsvJson(InterfaceFilaLeitura filaLeitura, InterfaceFilaConversao filaConversao) {
 		this.filaLeitura = filaLeitura;
 		this.filaConversao = filaConversao;
 	}
-	
-	@Override
-	public void run() {		
 
-		long tempoInicio = System.nanoTime();
-		
-		while (filaLeitura.getSize() > 0 && !filaLeitura.getTerminou()) {
+	@Override
+	public void run() {
+
+		long tempoInicio = System.nanoTime();				
+
+		while (filaLeitura.getSize() > 0 || !filaLeitura.getTerminou()) {
 
 			Brasil informacao = new Brasil();
 			String dado = "";
-			dado = filaLeitura.desenfilerar();
-
+			dado = filaLeitura.desenfilerar();			
+			if(dado == null) {
+				continue;
+			}			
+			
 			String[] linha = dado.split(",");
 
 			if (linha[0] == "Number") {
+
 				continue;
 			} else {
 
@@ -56,15 +59,15 @@ public class ParseCsvJson implements Runnable{
 				informacao.setCentimetros(linha[23]);
 				informacao.setGuid(linha[24]);
 
-				filaConversao.enfilerar(informacao);						
+				filaConversao.enfilerar(informacao);
 			}
 		}
 
-		long tempoFim = System.nanoTime();	
-		
+		long tempoFim = System.nanoTime();
+
 		long duracao = (tempoFim - tempoInicio) / 1000000;
-		filaConversao.setTerminou(true);
-				
-		System.out.println("Conversão tempo levado: " + duracao + " milliseconds.");				
+		filaConversao.setTerminou(true);		
+
+		System.out.println("Conversão tempo levado: " + duracao + " milliseconds.");
 	}
 }

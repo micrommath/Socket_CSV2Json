@@ -25,24 +25,24 @@ public class GravacaoJson implements Runnable{
 	public void run() {
  
 		try (BufferedWriter writter = Files.newBufferedWriter(caminhoSalvar, StandardCharsets.ISO_8859_1,
-				StandardOpenOption.APPEND)) {
+				StandardOpenOption.CREATE)) {
 
-			long tempoInicio = System.nanoTime();
-
-			while (filaConversao.getSize() > 0 && !filaConversao.getTerminou()) {
+			long tempoInicio = System.nanoTime();			
+			Gson gson = new Gson();
+			
+			while (filaConversao.getSize() > 0 || !filaConversao.getTerminou()) {
 
 				Brasil obj = filaConversao.desenfilerar();
-
-				Gson gson = new Gson();
+				
 				String json = gson.toJson(obj);
 
-				writter.append(json);				
+				writter.append(json);					
 			}
 
 			long tempoFim = System.nanoTime();
 
-			long duration = (tempoFim - tempoInicio) / 1000000;
-			System.out.println("Gravação tempo levado: " + duration + " milliseconds.");
+			long duracao = (tempoFim - tempoInicio) / 1000000;
+			System.out.println("Gravação tempo levado: " + duracao + " milliseconds.");
 			
 		} catch (IOException e) {
 			System.out.println(e.getStackTrace());

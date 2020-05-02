@@ -16,7 +16,7 @@ public class FilaLeitura implements InterfaceFilaLeitura {
 	}
 
 	@Override
-	public void enfilerar(String data) {
+	public synchronized void enfilerar(String data) {
 		try {
 			fila.put(data);
 		} catch (InterruptedException e) {
@@ -25,10 +25,10 @@ public class FilaLeitura implements InterfaceFilaLeitura {
 	}
 	
 	@Override
-	public String desenfilerar() {
+	public synchronized String desenfilerar() {
 		try {
-			if (!fila.isEmpty()) {
-				return fila.take();
+			if (!fila.isEmpty()) {								
+				return fila.take();							
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();

@@ -40,10 +40,10 @@ public class LeituraCsv implements Runnable {
 
 			long tempoFim = System.nanoTime();
 
-			long duration = (tempoFim - tempoInicio) / 1000000;
+			long duracao = (tempoFim - tempoInicio) / 1000000;
 			filaLeitura.setTerminou(true);
 			
-			System.out.println("Leitura tempo levado: " + duration + " milliseconds.");
+			System.out.println("Leitura tempo levado: " + duracao + " milliseconds.");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
