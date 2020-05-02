@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
+import cliente.models.ConexaoServidor;
 import cliente.models.LogInformacoes;
 import cliente.models.TempoViewModel;
 import javafx.event.ActionEvent;
@@ -17,13 +18,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 
-public class InicialController implements Initializable { 
-
-	@FXML
-	private BorderPane borderPane;
+public class InicialController implements Initializable {
 
 	@FXML
 	private Button btnChoose;
@@ -39,6 +36,15 @@ public class InicialController implements Initializable {
 
 	@FXML
 	private ProgressBar progBarGravacao;
+
+	@FXML
+	private Button btnStart;
+
+	@FXML
+	private TextField txtPorta;
+
+	@FXML
+	private TextField txtServer;
 
 	@FXML
 	private TextField txtMinLeitura;
@@ -70,10 +76,17 @@ public class InicialController implements Initializable {
 	@FXML
 	private Label lblQuantidade;
 
+	@FXML
+	private Label txtFileSaida;
+
 	private String caminhoArquivo = null;
 
+	private String caminhoArquivoSaida;
+
 	private TemposController tempoController;
-	
+
+	private final Path arquivoTempoLevado = Paths.get(System.getProperty("java.io.tmpdir") + "tempoCsvToJson.txt");
+
 	public InicialController() {
 		tempoController = new TemposController();
 	}
@@ -81,10 +94,12 @@ public class InicialController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		TempoViewModel tempo = new TempoViewModel(txtMinLeitura, txtMaxLeitura, txtMediaLeitura, txtMinParse, txtMaxParse,
-				txtMediaParse, txtMinGravacao, txtMaxGravacao, txtMediaGravacao, lblQuantidade);		
-		tempoController.CalcularTempos(tempo); 
+		TempoViewModel tempo = new TempoViewModel(txtMinLeitura, txtMaxLeitura, txtMediaLeitura, txtMinParse,
+				txtMaxParse, txtMediaParse, txtMinGravacao, txtMaxGravacao, txtMediaGravacao, lblQuantidade);
+		tempoController.CalcularTempos(tempo);
 
+		this.caminhoArquivoSaida = System.getProperty("java.io.tmpdir") + "brasil.txt";
+		txtFileSaida.setText(this.caminhoArquivoSaida);
 	}
 
 	public void btnChooseAction(ActionEvent event) throws InterruptedException {
@@ -103,29 +118,31 @@ public class InicialController implements Initializable {
 
 		if (caminhoArquivo != null) {
 
-			Path caminhoLeitura = Paths.get(caminhoArquivo);
-			Path caminhoGravacao = Paths.get(System.getProperty("java.io.tmpdir") + "brasil.txt");
-			Path arquivoTempoLevado = Paths.get(System.getProperty("java.io.tmpdir") + "tempoCsvToJson.txt");
-			LogInformacoes logInformacoes = new LogInformacoes();
+			// caminhoArquivo;
+			// caminhoArquivoSaida
 
-			/*
-			 * Conversao conversao = new Conversao();
-			 * conversao.realizarOperacoes(caminhoLeitura, caminhoGravacao, progBarLeitura,
-			 * progBarConversao, progBarGravacao, logInformacoes, arquivoTempoLevado);
-			 */
-
+			//LogInformacoes logInformacoes = new LogInformacoes();
+			String host = txtServer.getText();
+			int porta = Integer.parseInt(txtPorta.getText());
+			
+			ConexaoServidor conServidor = new ConexaoServidor(host, porta);
+			conServidor.conectar();
+					
+			
+			conServidor.enviarCaminhos(this.caminhoArquivo, this.caminhoArquivoSaida);
+			
 		} else {
-			AlertaWarning(AlertType.WARNING ,"Arquivo", "Escolha um arquivo", "Escolha um arquivo válido para iniciar");
+			Alerta(AlertType.WARNING, "Arquivo", "Escolha um arquivo", "Escolha um arquivo válido para iniciar");
 		}
 	}
-	
-	private void AlertaWarning(AlertType tipo, String titulo, String cabecalho, String mensagem) {
+
+	private void Alerta(AlertType tipo, String titulo, String cabecalho, String mensagem) {
 		Alert alert = new Alert(tipo);
 		alert.setTitle(titulo);
 		alert.setHeaderText(cabecalho);
 		alert.setContentText(mensagem);
 		alert.show();
-		
+
 	}
 
 }

@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="465.0" prefWidth="656.0" style="-fx-background-color: white; -fx-border-radius: 3;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.InicialController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0" prefWidth="656.0" style="-fx-background-color: white; -fx-border-radius: 3;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cliente.controllers.InicialController">
    <children>
       <Button fx:id="btnChoose" layoutX="7.0" layoutY="32.0" mnemonicParsing="false" onAction="#btnChooseAction" prefHeight="38.0" prefWidth="105.0" text="Escolha arquivo" />
       <Label fx:id="txtFileChoose" disable="true" layoutX="115.0" layoutY="32.0" prefHeight="38.0" prefWidth="288.0" style="-fx-border-color: gray;" text="Nome do arquivo...">
@@ -16,23 +16,23 @@
             <Insets left="10.0" />
          </padding>
       </Label>
-      <ProgressBar fx:id="progBarLeitura" layoutX="7.0" layoutY="136.0" prefHeight="18.0" prefWidth="394.0" progress="0.0" />
-      <Label layoutX="7.0" layoutY="119.0" prefHeight="17.0" prefWidth="120.0" text="Progresso leitura" />
-      <ProgressBar fx:id="progBarConversao" layoutX="7.0" layoutY="177.0" prefHeight="18.0" prefWidth="394.0" progress="0.0" />
-      <Label layoutX="7.0" layoutY="160.0" prefHeight="17.0" prefWidth="120.0" text="Progresso conversão" />
-      <ProgressBar fx:id="progBarGravacao" layoutX="7.0" layoutY="218.0" prefHeight="18.0" prefWidth="394.0" progress="0.0" />
-      <Label layoutX="7.0" layoutY="201.0" prefHeight="17.0" prefWidth="120.0" text="Progresso gravação" />
-      <Button fx:id="btnStart" layoutX="323.0" layoutY="76.0" mnemonicParsing="false" onAction="#btnStartAction" prefHeight="38.0" prefWidth="80.0" text="Iniciar" />
+      <ProgressBar fx:id="progBarLeitura" layoutX="8.0" layoutY="201.0" prefHeight="18.0" prefWidth="394.0" progress="0.0" />
+      <Label layoutX="8.0" layoutY="184.0" prefHeight="17.0" prefWidth="120.0" text="Progresso leitura" />
+      <ProgressBar fx:id="progBarConversao" layoutX="8.0" layoutY="242.0" prefHeight="18.0" prefWidth="394.0" progress="0.0" />
+      <Label layoutX="8.0" layoutY="225.0" prefHeight="17.0" prefWidth="120.0" text="Progresso conversão" />
+      <ProgressBar fx:id="progBarGravacao" layoutX="8.0" layoutY="283.0" prefHeight="18.0" prefWidth="394.0" progress="0.0" />
+      <Label layoutX="8.0" layoutY="266.0" prefHeight="17.0" prefWidth="120.0" text="Progresso gravação" />
+      <Button fx:id="btnStart" layoutX="324.0" layoutY="142.0" mnemonicParsing="false" onAction="#btnStartAction" prefHeight="38.0" prefWidth="80.0" text="Iniciar" />
       <Label layoutX="304.0" layoutY="8.0" prefHeight="25.0" prefWidth="97.0" text="Arquivo brasil.csv" textAlignment="CENTER" textFill="#ff3d3d">
          <font>
             <Font name="Century Gothic" size="11.0" />
          </font>
       </Label>
-      <TextField fx:id="txtPorta" layoutX="255.0" layoutY="76.0" prefHeight="38.0" prefWidth="63.0" />
-      <TextField fx:id="txtServer" layoutX="68.0" layoutY="76.0" prefHeight="38.0" prefWidth="140.0" />
-      <Label layoutX="212.0" layoutY="76.0" prefHeight="38.0" prefWidth="40.0" text="Porta" />
-      <Label layoutX="7.0" layoutY="76.0" prefHeight="38.0" prefWidth="63.0" text="Endereço" />
-      <Pane layoutX="7.0" layoutY="241.0" prefHeight="217.0" prefWidth="642.0" style="-fx-border-color: black; -fx-border-radius: 3;">
+      <TextField fx:id="txtPorta" layoutX="256.0" layoutY="142.0" prefHeight="38.0" prefWidth="63.0" />
+      <TextField fx:id="txtServer" layoutX="69.0" layoutY="142.0" prefHeight="38.0" prefWidth="140.0" />
+      <Label layoutX="213.0" layoutY="142.0" prefHeight="38.0" prefWidth="40.0" text="Porta" />
+      <Label layoutX="8.0" layoutY="142.0" prefHeight="38.0" prefWidth="63.0" text="Endereço" />
+      <Pane layoutX="8.0" layoutY="306.0" prefHeight="217.0" prefWidth="642.0" style="-fx-border-color: black; -fx-border-radius: 3;">
          <children>
             <Pane layoutX="6.0" layoutY="47.0" prefHeight="164.0" prefWidth="206.0" style="-fx-border-color: lightgrey; -fx-border-radius: 3;">
                <children>
@@ -101,6 +101,16 @@
          <font>
             <Font size="16.0" />
          </font>
+      </Label>
+      <Label layoutX="8.0" layoutY="73.0" prefHeight="27.0" prefWidth="140.0" text="Arquivo de saída">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="txtFileSaida" disable="true" layoutX="9.0" layoutY="99.0" prefHeight="38.0" prefWidth="394.0" style="-fx-border-color: gray;">
+         <padding>
+            <Insets left="10.0" />
+         </padding>
       </Label>
    </children>
 </Pane>

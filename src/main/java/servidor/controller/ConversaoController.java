@@ -1,5 +1,6 @@
 package servidor.controller;
 
+import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -10,7 +11,7 @@ import servidor.models.LeituraCsv;
 import servidor.models.ParseCsvJson;
 import servidor.models.interfaces.*;
 
-public class ConversaoController extends Thread {
+public class ConversaoController {
 
 	private LeituraCsv leituraCSV;
 	private ParseCsvJson parseCsvJson;
@@ -19,9 +20,12 @@ public class ConversaoController extends Thread {
 	private InterfaceFilaLeitura filaLeitura;
 	private InterfaceFilaConversao filaConversao;
 
+	private Socket cliente;
+	
 	private int totalLinhas;
 
-	public ConversaoController() {
+	public ConversaoController(Socket cliente) {		
+		this.cliente = cliente;
 	}
 
 	public void realizarOperacoes(Path caminhoLeitura, Path caminhoSalvar) {
@@ -48,5 +52,5 @@ public class ConversaoController extends Thread {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}	
 }

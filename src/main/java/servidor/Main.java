@@ -1,35 +1,32 @@
 package servidor;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import servidor.controller.ConversaoController;
+import java.net.ServerSocket;
+import java.net.Socket;
+import servidor.controller.ClienteController;
 
 public class Main {
 
 	public static void main(String[] args) {
-		/*
-		 * try { do { System.out.println("[ Iniciando o servidor...... ]"); ServerSocket
-		 * server = new ServerSocket(8080); System.out.print("[ OK ]\n");
-		 * 
-		 * System.out.println("[ Esperando por conexões.... ] "); Socket cliente =
-		 * server.accept(); System.out.print("[ OK ]\n");
-		 * 
-		 * 
-		 * 
-		 * } while (true);
-		 * 
-		 * } catch (IOException e) { e.printStackTrace(); }
-		 * 
-		 * System.out.println("Servidor encerrado.");
-		 */
-
+		String nameHost = "localhost";
+		int port = 8080;
 		try {
+			System.out.println("Host: " + nameHost + " Porta: " + port);
+			System.out.print("[ Iniciando Servidor......................... ]");
+			// Instância o servidor
+			ServerSocket server = new ServerSocket(port);
+			System.out.print("[ OK ]\n");
 
-			Path leitura = Paths.get("C:\\Users\\Matheus de Oliveira\\Desktop\\brasil.csv");
-			Path gravacao = Paths.get(System.getProperty("java.io.tmpdir") + "brasil.txt");			
+			System.out.print("[ Esperando por conexões .................... ]");
+
+			// The METHOD BLOCKS until a connection is made.
+			Socket cliente = server.accept();
+			System.out.print("[ OK ]\n");
+
+			// Cria e inicia uma nova thread para o cliente
+			new Thread(new ClienteController(cliente)).start();;
+						
+			System.out.println("[ Thread execução cliente iniciada .......... ]");
 			
-			new ConversaoController().realizarOperacoes(leitura, gravacao);
 		} catch (Exception ex) {
 			ex.getStackTrace();
 		}
