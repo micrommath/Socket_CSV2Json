@@ -46,7 +46,7 @@ public class LeituraCsv implements Runnable {
 				filaLeitura.enfilerar(reader.readLine());
 				contador++;
 
-				this.enviarFeedback(feedback, contador);			 
+				//this.enviarFeedback(feedback, contador);			 
 			}
 
 			long tempoFim = System.nanoTime();
