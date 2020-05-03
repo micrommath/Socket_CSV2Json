@@ -16,7 +16,7 @@ public class FilaConversao implements InterfaceFilaConversao {
 	}
 
 	@Override
-	public void enfilerar(Brasil data) {
+	public synchronized void enfilerar(Brasil data) {
 		try {
 			fila.put(data);
 		} catch (InterruptedException e) {
@@ -25,7 +25,7 @@ public class FilaConversao implements InterfaceFilaConversao {
 	}
 	
 	@Override
-	public Brasil desenfilerar() {
+	public synchronized Brasil desenfilerar() {
 		try {
 			if (fila.size() > 0)
 				return fila.take();
@@ -38,22 +38,22 @@ public class FilaConversao implements InterfaceFilaConversao {
 	}	
 	
 	@Override
-	public int getSize() {
+	public synchronized int getSize() {
 		return fila.size();
 	}
 	
 	@Override
-	public boolean getTerminou() {
+	public synchronized boolean getTerminou() {
 		return this.terminou;
 	}
 	
 	@Override
-	public void setTerminou(boolean terminou) {
+	public synchronized void setTerminou(boolean terminou) {
 		this.terminou = terminou;
 	}
 
 	@Override
-	public boolean getEstaVazio() {
+	public synchronized boolean getEstaVazio() {
 		return fila.isEmpty();
 	}
 }

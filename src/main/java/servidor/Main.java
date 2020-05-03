@@ -2,6 +2,7 @@ package servidor;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+
 import servidor.controller.ClienteController;
 
 public class Main {
@@ -9,6 +10,7 @@ public class Main {
 	public static void main(String[] args) {
 		String nameHost = "localhost";
 		int port = 8080;
+
 		try {
 			System.out.println("Host: " + nameHost + " Porta: " + port);
 			System.out.print("[ Iniciando Servidor......................... ]");
@@ -16,18 +18,24 @@ public class Main {
 			ServerSocket server = new ServerSocket(port);
 			System.out.print("[ OK ]\n");
 
-			System.out.print("[ Esperando por conexões .................... ]");
+			while (true) {
 
-			// The METHOD BLOCKS until a connection is made.
-			Socket cliente = server.accept();
-			System.out.print("[ OK ]\n");
+				System.out.print("[ Esperando por conexões .................... ]\n");				
 
-			// Cria e inicia uma nova thread para o cliente
-			new Thread(new ClienteController(cliente)).start();;
-						
-			System.out.println("[ Thread execução cliente iniciada .......... ]");
-			
-		} catch (Exception ex) {
+				// The METHOD BLOCKS until a connection is made.
+				Socket cliente = server.accept();
+				System.out.print("[ OK ]\n");
+
+				// Cria e inicia uma nova thread para o cliente
+				new Thread(new ClienteController(cliente)).start();
+				
+				System.out.println("[ Iniciando operações ....................... ]");
+				
+				System.out.println("\n\n");
+			}
+		} catch (
+
+		Exception ex) {
 			ex.getStackTrace();
 		}
 	}

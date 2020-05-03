@@ -8,6 +8,8 @@ import java.nio.file.Paths;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import servidor.models.ThreadCliente;
+
 public class ClienteController implements Runnable {
 
 	private Socket cliente;
@@ -27,8 +29,7 @@ public class ClienteController implements Runnable {
 
 				Scanner scan = new Scanner(entrada);
 				String caminho = scan.nextLine();
-				String[] caminhos = caminho.split(";");
-				scan.close();
+				String[] caminhos = caminho.split(";");						
 
 				if(caminhos == null || caminhos.length < 2) {
 					try {
@@ -41,21 +42,15 @@ public class ClienteController implements Runnable {
 				Path pathLeitura = Paths.get(caminhos[0]);
 				Path pathGravacao = Paths.get(caminhos[1]);
 
-				Thread thCliente = new Thread(new Runnable() {
-					@Override
-					public void run() {
-						new ConversaoController(cliente).realizarOperacoes(pathLeitura, pathGravacao);
-					}
-				});
-
+				Thread thCliente = new Thread(new ThreadCliente(cliente, pathLeitura, pathGravacao));
 				thCliente.start();
 
 			} catch (NoSuchElementException e) {
-				System.out.println("Operação cancelada pelo usuário");				
-				break;
+				e.getStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch (Exception e) {
+				e.getStackTrace();
 			}
 		}
 

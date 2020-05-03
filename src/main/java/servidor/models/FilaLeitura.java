@@ -37,22 +37,22 @@ public class FilaLeitura implements InterfaceFilaLeitura {
 	}	
 
 	@Override
-	public int getSize() {
+	public synchronized int getSize() {
 		return fila.size();
 	}
 
 	@Override
-	public boolean getEstaVazio() {
+	public synchronized boolean getEstaVazio() {
 		return fila.isEmpty();
 	}
 	
 	@Override
-	public void setTerminou(boolean terminou) {
+	public synchronized void setTerminou(boolean terminou) {
 		this.terminou = terminou;
 	}
 	
 	@Override
-	public boolean getTerminou() {
+	public synchronized boolean getTerminou() {
 		return this.terminou;
 	}
 }
