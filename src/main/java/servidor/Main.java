@@ -27,7 +27,7 @@ public class Main {
 				System.out.print("[ OK ]\n");
 
 				// Cria e inicia uma nova thread para o cliente
-				new Thread(new ClienteController(cliente)).start();
+				new Thread(new ClienteController(cliente)).start();					
 				
 				System.out.println("[ Iniciando operações ....................... ]");
 				

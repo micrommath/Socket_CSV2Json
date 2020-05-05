@@ -16,7 +16,7 @@ public class FilaLeitura implements InterfaceFilaLeitura {
 	}
 
 	@Override
-	public synchronized void enfilerar(String data) {
+	public void enfilerar(String data) {
 		try {
 			fila.put(data);
 		} catch (InterruptedException e) {
@@ -25,7 +25,7 @@ public class FilaLeitura implements InterfaceFilaLeitura {
 	}
 	
 	@Override
-	public synchronized String desenfilerar() {
+	public String desenfilerar() {
 		try {
 			if (!fila.isEmpty()) {								
 				return fila.take();							
@@ -37,22 +37,22 @@ public class FilaLeitura implements InterfaceFilaLeitura {
 	}	
 
 	@Override
-	public synchronized int getSize() {
+	public int getSize() {
 		return fila.size();
 	}
 
 	@Override
-	public synchronized boolean getEstaVazio() {
+	public boolean getEstaVazio() {
 		return fila.isEmpty();
 	}
 	
 	@Override
-	public synchronized void setTerminou(boolean terminou) {
+	public void setTerminou(boolean terminou) {
 		this.terminou = terminou;
 	}
 	
 	@Override
-	public synchronized boolean getTerminou() {
+	public boolean getTerminou() {
 		return this.terminou;
 	}
 }

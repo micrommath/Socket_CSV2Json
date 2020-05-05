@@ -7,21 +7,23 @@ public class ParseCsvJson implements Runnable {
 	private InterfaceFilaLeitura filaLeitura;
 	private InterfaceFilaConversao filaConversao;
 
-	public ParseCsvJson(InterfaceFilaLeitura filaLeitura, InterfaceFilaConversao filaConversao) {
+	private ProgressoParse progressoParse;
+	
+	public ParseCsvJson(InterfaceFilaLeitura filaLeitura, InterfaceFilaConversao filaConversao, ProgressoParse progressoParse) {
 		this.filaLeitura = filaLeitura;
 		this.filaConversao = filaConversao;
+		this.progressoParse = progressoParse;
 	}
 
 	@Override
 	public void run() {
-
+		
 		long tempoInicio = System.nanoTime();				
 
 		while (filaLeitura.getSize() > 0 || !filaLeitura.getTerminou()) {
 
 			Brasil informacao = new Brasil();
-			String dado = "";
-			dado = filaLeitura.desenfilerar();			
+			String dado = filaLeitura.desenfilerar();			
 			if(dado == null) {
 				continue;
 			}			
@@ -60,6 +62,8 @@ public class ParseCsvJson implements Runnable {
 				informacao.setGuid(linha[24]);
 
 				filaConversao.enfilerar(informacao);
+				
+				progressoParse.incrementarProgresso();
 			}
 		}
 

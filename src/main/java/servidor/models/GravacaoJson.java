@@ -16,14 +16,17 @@ public class GravacaoJson implements Runnable{
 	private Path caminhoSalvar;
 	private InterfaceFilaConversao filaConversao;
 	
-	public GravacaoJson(Path caminhoSalvar, InterfaceFilaConversao filaConversao) {
+	private ProgressoGravacao progressoGravacao;
+	
+	public GravacaoJson(Path caminhoSalvar, InterfaceFilaConversao filaConversao, ProgressoGravacao progressoGravacao) {
 		this.caminhoSalvar = caminhoSalvar;
 		this.filaConversao = filaConversao;
+		this.progressoGravacao = progressoGravacao;
 	}
 
 	@Override
 	public void run() {
- 
+		
 		try (BufferedWriter writter = Files.newBufferedWriter(caminhoSalvar, StandardCharsets.ISO_8859_1,
 				StandardOpenOption.CREATE)) {
 
@@ -36,7 +39,9 @@ public class GravacaoJson implements Runnable{
 				
 				String json = gson.toJson(obj);
 
-				writter.append(json);					
+				writter.append(json);			
+				
+				progressoGravacao.incrementarProgresso();
 			}
 
 			long tempoFim = System.nanoTime();

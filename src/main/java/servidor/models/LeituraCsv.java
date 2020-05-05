@@ -1,8 +1,10 @@
 package servidor.models;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,23 +15,20 @@ import servidor.models.interfaces.InterfaceFilaLeitura;
 public class LeituraCsv implements Runnable {
 
 	private Path caminhoLeitura;
-	private InterfaceFilaLeitura filaLeitura;
-	private Socket cliente;
-
-	public LeituraCsv(Path caminhoLeitura, InterfaceFilaLeitura filaLeitura, Socket cliente) {
+	private InterfaceFilaLeitura filaLeitura;	
+	private ProgressoLeitura progressoLeitura;	
+	
+	public LeituraCsv(Path caminhoLeitura, InterfaceFilaLeitura filaLeitura, ProgressoLeitura progressoLeitura) {
 		this.caminhoLeitura = caminhoLeitura;
-		this.filaLeitura = filaLeitura;
-		this.cliente = cliente;
+		this.filaLeitura = filaLeitura;		
+		this.progressoLeitura = progressoLeitura;
 	}
 
 	@Override
 	public void run() {
-		Feedback feedback = new Feedback(0, 0, 0);
-
-		int contador = 0;
 		try (BufferedReader reader = Files.newBufferedReader(caminhoLeitura)) {
+					
 			boolean primeiraLinha = true;
-
 			long tempoInicio = System.nanoTime();
 
 			while (reader.ready()) {
@@ -41,12 +40,10 @@ public class LeituraCsv implements Runnable {
 					@SuppressWarnings("unused")
 					String linhaCabecalho = reader.readLine();
 					continue;
-				}
-
+				}								
 				filaLeitura.enfilerar(reader.readLine());
-				contador++;
-
-				//this.enviarFeedback(feedback, contador);			 
+				
+				progressoLeitura.incrementarProgresso();				
 			}
 
 			long tempoFim = System.nanoTime();
@@ -59,16 +56,5 @@ public class LeituraCsv implements Runnable {
 			e.printStackTrace();
 		}
 
-	}
-
-	private synchronized void enviarFeedback(Feedback feedback, int contador) {
-		try {
-			feedback.setPbarLeituraValor(contador);
-			ObjectOutputStream os = new ObjectOutputStream(this.cliente.getOutputStream());
-			os.writeObject(feedback);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 }
