@@ -1,6 +1,5 @@
 package servidor.controller;
 
-import java.lang.Thread.State;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,7 +8,7 @@ import servidor.models.FilaConversao;
 import servidor.models.FilaLeitura;
 import servidor.models.GravacaoJson;
 import servidor.models.LeituraCsv;
-import servidor.models.Observador;
+import servidor.models.ObservadorProgresso;
 import servidor.models.PBarsOperacoes;
 import servidor.models.ParseCsvJson;
 import servidor.models.ProgressoGravacao;
@@ -23,7 +22,7 @@ public class ConversaoController {
 	private ParseCsvJson parseCsvJson;
 	private GravacaoJson gravacaoJson;
 
-	private Observador observador;
+	private ObservadorProgresso observador;
 
 	private InterfaceFilaLeitura filaLeitura;
 	private InterfaceFilaConversao filaConversao;
@@ -62,7 +61,7 @@ public class ConversaoController {
 			gravacaoJson = new GravacaoJson(caminhoSalvar, filaConversao, progressoGravacao);
 
 			// Observador
-			observador = new Observador(filaLeitura, filaConversao, caminhoSalvar, cliente, totalLinhas,
+			observador = new ObservadorProgresso(filaLeitura, filaConversao, caminhoSalvar, cliente, totalLinhas,
 					progressoLeitura, progressoParse, progressoGravacao, pBarsOperacoes);
 
 			// Threads

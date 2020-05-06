@@ -70,7 +70,8 @@ public class ParseCsvJson implements Runnable {
 		long tempoFim = System.nanoTime();
 
 		long duracao = (tempoFim - tempoInicio) / 1000000;
-		filaConversao.setTerminou(true);		
+		filaConversao.setTerminou(true);	
+		progressoParse.setTerminado(true);
 
 		System.out.println("Conversão tempo levado: " + duracao + " milliseconds.");
 	}

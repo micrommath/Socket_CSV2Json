@@ -1,19 +1,13 @@
 package servidor.controller;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.net.Socket;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import servidor.models.Feedback;
 import servidor.models.ThreadCliente;
 
 public class ClienteController implements Runnable {
@@ -52,11 +46,11 @@ public class ClienteController implements Runnable {
 			}
 		}
 
-		try {
+		/*try {
 			cliente.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 }

@@ -1,29 +1,14 @@
 package cliente.controllers;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintStream;
-import java.net.Socket;
 import java.net.URL;
-import java.net.UnknownHostException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 
-import com.sun.javafx.tk.Toolkit.Task;
-
-import servidor.models.Feedback;
 import cliente.models.ConexaoServidor;
-import cliente.models.LogInformacoes;
-import cliente.models.TasksUpdate;
 import cliente.models.TempoViewModel;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -124,9 +109,9 @@ public class InicialController implements Initializable {
 				txtMaxParse, txtMediaParse, txtMinGravacao, txtMaxGravacao, txtMediaGravacao, lblQuantidade);
 		tempoController.CalcularTempos(tempo);
 
+		// Valores padrão
 		this.caminhoArquivoSaida = System.getProperty("java.io.tmpdir") + "brasil.txt";
 		txtFileSaida.setText(this.caminhoArquivoSaida);
-
 		txtServer.setText("localhost");
 		txtPorta.setText("8080");
 	}
@@ -146,74 +131,29 @@ public class InicialController implements Initializable {
 
 		if (caminhoArquivo != null && caminhoArquivo.endsWith(".csv")) {
 
-			// caminhoArquivo;
-			// caminhoArquivoSaida
-
-			// LogInformacoes logInformacoes = new LogInformacoes();
-
-			this.conexaoServidor(this.caminhoArquivo, this.caminhoArquivoSaida);
+			// Conexao com o servidor
+			ConexaoServidor conexao = new ConexaoServidor();
+			conexao.Conectar(txtServer.getText(), Integer.parseInt(txtPorta.getText()), caminhoArquivo, caminhoArquivoSaida, progBarLeitura);			
+			
 		} else {
 			Alerta(AlertType.WARNING, "Arquivo", "Falha",
 					"Escolha um arquivo válido para iniciar\nFormato aceito: CSV File (.csv)");
 		}
 	}
 
-	private void conexaoServidor(String caminhoLeitura, String caminhoGravacao) {
-		Socket cliente = null;
+	public Task<Void> updateTaskLeitura() {
+		
+		return new Task<Void>() {
+			@Override
+			protected Void call() {
 
-		try {
-			String host = txtServer.getText();
-			int porta = Integer.parseInt(txtPorta.getText());
-
-			cliente = new Socket(host, porta);
-
-			PrintStream saida = new PrintStream(cliente.getOutputStream());
-
-			String caminhos = caminhoLeitura + ";" + caminhoGravacao;
-			saida.println(caminhos);
-
-			while (!cliente.isClosed()) {
-
-				InputStream entrada = cliente.getInputStream();
-
-				if (entrada.available() > 0) {
-					try {
-						byte[] arrBytes = new byte[3000];
-						entrada.read(arrBytes);
-
-						ByteArrayInputStream bos = new ByteArrayInputStream(arrBytes);
-						ObjectInputStream oos = new ObjectInputStream(bos);
-
-						Object obj;
-
-						obj = oos.readObject();
-
-						Feedback feedback = (Feedback) obj;
-
-						System.out.println(feedback.toString());
-
-						//new TasksUpdate(pBarFilaConversao, pBarFilaLeitura).updatePFilaBarLeitura(feedback.getPbarLeituraValor(), feedback.getTotalLinhas());
-						// tasksUpdate.updatePBarFilaConversao(feedback.getPbarLeituraValor(),
-						// feedback.getTotalLinhas());											
-					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-				}
+				
+				
+				return null;
 			}
-
-			/*
-			 * ConexaoServidor conexao = new ConexaoServidor(cliente, pBarFilaLeitura,
-			 * pBarFilaConversao, caminhoLeitura, caminhoGravacao); Thread tConexao = new
-			 * Thread(conexao); tConexao.start();
-			 */
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		};
 	}
-
+	
 	private void Alerta(AlertType tipo, String titulo, String cabecalho, String mensagem) {
 		Alert alert = new Alert(tipo);
 		alert.setTitle(titulo);

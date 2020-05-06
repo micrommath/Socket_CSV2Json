@@ -35,15 +35,14 @@ public class GravacaoJson implements Runnable{
 			
 			while (filaConversao.getSize() > 0 || !filaConversao.getTerminou()) {
 
-				Brasil obj = filaConversao.desenfilerar();
-				
-				String json = gson.toJson(obj);
-
-				writter.append(json);			
-				
 				progressoGravacao.incrementarProgresso();
+				Brasil obj = filaConversao.desenfilerar();				
+				writter.append(gson.toJson(obj));											
+				
 			}
 
+			progressoGravacao.setTerminado(true);
+			
 			long tempoFim = System.nanoTime();
 
 			long duracao = (tempoFim - tempoInicio) / 1000000;

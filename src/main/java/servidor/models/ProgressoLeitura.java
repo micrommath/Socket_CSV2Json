@@ -6,6 +6,7 @@ public class ProgressoLeitura {
 	private PBarsOperacoes pBarsOperacoes;
 	private double acum;
 	private int cont;
+	private boolean terminado;
 
 	public ProgressoLeitura(PBarsOperacoes pBarsOperacoes) {
 		this.pBarsOperacoes = pBarsOperacoes;
@@ -24,5 +25,13 @@ public class ProgressoLeitura {
 
 	public double getPBarValue() {
 		return this.acum;
+	}
+	
+	public void setTerminado(boolean terminado) {
+		this.terminado = terminado;
+	}
+	
+	public boolean getTerminado() {
+		return this.terminado;
 	}
 }

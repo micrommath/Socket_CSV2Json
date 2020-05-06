@@ -1,15 +1,10 @@
 package servidor.models;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import servidor.models.Feedback;
 import servidor.models.interfaces.InterfaceFilaLeitura;
 
 public class LeituraCsv implements Runnable {
@@ -50,7 +45,8 @@ public class LeituraCsv implements Runnable {
 
 			long duracao = (tempoFim - tempoInicio) / 1000000;
 			filaLeitura.setTerminou(true);
-
+			progressoLeitura.setTerminado(true);
+			
 			System.out.println("Leitura tempo levado: " + duracao + " milliseconds.");
 		} catch (IOException e) {
 			e.printStackTrace();

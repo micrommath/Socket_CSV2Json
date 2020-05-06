@@ -10,7 +10,7 @@ import java.nio.file.Path;
 import servidor.models.interfaces.InterfaceFilaConversao;
 import servidor.models.interfaces.InterfaceFilaLeitura;
 
-public class Observador implements Runnable {
+public class ObservadorProgresso implements Runnable {
 
 	private final int maximoAceitavel = 100;
 
@@ -27,11 +27,15 @@ public class Observador implements Runnable {
 	private ProgressoParse progressoParse;
 	private ProgressoGravacao progressoGravacao;
 
+	private String statusLeitura = "Parado";
+	private String statusParse = "Parado";
+	private String statusGravacao = "Parado";
+
 	int contadorThConversao = 0, contadorThGravacao = 0;
 
-	public Observador(InterfaceFilaLeitura filaLeitura, InterfaceFilaConversao filaConversao, Path caminhoSalvar,
-			Socket cliente, int totalLinhas, ProgressoLeitura progressoLeitura, ProgressoParse progressoParse,
-			ProgressoGravacao progressoGravacao, PBarsOperacoes pBarsOperacoes) {
+	public ObservadorProgresso(InterfaceFilaLeitura filaLeitura, InterfaceFilaConversao filaConversao,
+			Path caminhoSalvar, Socket cliente, int totalLinhas, ProgressoLeitura progressoLeitura,
+			ProgressoParse progressoParse, ProgressoGravacao progressoGravacao, PBarsOperacoes pBarsOperacoes) {
 		this.filaLeitura = filaLeitura;
 		this.filaConversao = filaConversao;
 		this.caminhoSalvar = caminhoSalvar;
@@ -50,19 +54,26 @@ public class Observador implements Runnable {
 
 	private void observar() {
 
+		boolean primeiro = true;
+
 		try {
 			while (filaLeitura.getSize() > 0 || !filaLeitura.getTerminou() || filaConversao.getSize() > 0
 					|| !filaConversao.getTerminou()) {
 
-				this.observarConversao();
-				this.observarGravacao();
-				this.enviarFeedback(filaLeitura.getSize(), filaConversao.getSize());
+				if (primeiro) {
+					statusLeitura = statusParse = statusGravacao = "Inicio da operação";
+				}
 
-				Thread.sleep(7);
+				observarLeitura();
+				observarConversao();
+				observarGravacao();
+				enviarFeedback();
+
+				Thread.sleep(15);
 			}
 
-			this.enviarFeedback(filaLeitura.getSize(), filaConversao.getSize());
-			
+			enviarFeedback();
+
 			System.out.println("**** Quantidade de thread conversão: " + contadorThConversao);
 			System.out.println("**** Quantidade de thread gravação: " + contadorThGravacao);
 		} catch (InterruptedException e) {
@@ -71,12 +82,23 @@ public class Observador implements Runnable {
 
 	}
 
+	private void observarLeitura() {
+		if (!progressoLeitura.getTerminado())
+			this.statusLeitura = "Leitura em progresso...";
+		else
+			this.statusLeitura = "Leitura terminada...";
+	}
+
 	private void observarConversao() {
 		if (filaLeitura.getSize() >= maximoAceitavel && !filaLeitura.getTerminou()) {
 			contadorThConversao++;
 			new Thread(new ParseCsvJson(filaLeitura, filaConversao, progressoParse)).start();
 		}
 
+		if (!progressoParse.getTerminado())
+			this.statusParse = "Conversão em progresso...";
+		else
+			this.statusParse = "Conversão terminada...";
 	}
 
 	private void observarGravacao() {
@@ -85,18 +107,26 @@ public class Observador implements Runnable {
 			new Thread(new GravacaoJson(caminhoSalvar, filaConversao, progressoGravacao)).start();
 		}
 
+		if (!progressoGravacao.getTerminado())
+			this.statusGravacao = "Gravação em progresso...";
+		else
+			this.statusGravacao = "Gravação terminada...";
 	}
 
-	private void enviarFeedback(int sizeFilaLeitura, int sizeFilaParse) {
+	private void enviarFeedback() {
 		try {
+
 			Feedback feedback = new Feedback();
 
 			feedback.setTotalLinhas(totalLinhas);
-			feedback.setSizeFilaLeitura(sizeFilaLeitura);
-			feedback.setSizeFilaParse(sizeFilaParse);
+			feedback.setSizeFilaLeitura(filaLeitura.getSize());
+			feedback.setSizeFilaParse(filaConversao.getSize());
 			feedback.setPbarLeituraValor(pBarsOperacoes.getLeituraValor());
 			feedback.setPbarConversaoValor(pBarsOperacoes.getConversaoValor());
 			feedback.setPbarGravacaoValor(pBarsOperacoes.getGravacaoValor());
+			feedback.setStatusLeitura(statusLeitura);
+			feedback.setStatusParse(statusParse);
+			feedback.setStatusGravacao(statusGravacao);
 
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			ObjectOutputStream oos = new ObjectOutputStream(bos);

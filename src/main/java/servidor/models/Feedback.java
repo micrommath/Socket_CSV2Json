@@ -11,6 +11,10 @@ public class Feedback implements Serializable {
 	private double sizeFilaLeitura;
 	private double sizeFilaParse;
 	private int totalLinhas;
+	
+	private String statusLeitura;
+	private String statusParse;
+	private String statusGravacao;
 
 	public Feedback() {
 	}
@@ -55,14 +59,43 @@ public class Feedback implements Serializable {
 	
 	public int getTotalLinhas() {
 		return this.totalLinhas;
+	}	
+
+	public void setStatusLeitura(String status) {
+		this.statusLeitura = status;		
+	}
+	
+	public void setStatusParse(String status) {		
+		this.statusParse = status;		
+	}
+	
+	public void setStatusGravacao(String status) {
+		this.statusGravacao = status;		
+	}
+
+	public String getStatusLeitura() {
+		return statusLeitura;
+	}
+
+	public String getStatusParse() {
+		return statusParse;
+	}
+
+	public String getStatusGravacao() {
+		return statusGravacao;
 	}
 
 	@Override
 	public String toString() {
-		return "pBarLeitura: " + pBarLeituraValor + ", pBarConversao: " + pBarConversaoValor
-				+ ", pBarGravacao: " + pBarGravacaoValor + ", qntdFilaLeitura: " + sizeFilaLeitura
-				+ ", qntdFilaParse: " + sizeFilaParse + ", totalLinhasArquivo: " + totalLinhas;
+		return "pBarLeituraValor: " + pBarLeituraValor + ", " 
+				+ "pBarConversaoValor: " + pBarConversaoValor + ", "
+				+ "pBarGravacaoValor: " + pBarGravacaoValor + ", "
+				+ "sizeFilaLeitura: " + sizeFilaLeitura + ", "
+				+ "sizeFilaParse: " + sizeFilaParse + ", "				
+				+ "statusLeitura: " + statusLeitura + ", "
+				+ "statusParse: " + statusParse + ", "
+				+ "statusGravacao: " + statusGravacao + ", "								
+				+ "TotalLinhas: " + totalLinhas;
 	}
-	
 	
 }

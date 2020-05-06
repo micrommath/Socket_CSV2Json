@@ -6,69 +6,64 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import javafx.concurrent.Task;
 import javafx.scene.control.ProgressBar;
 import servidor.models.Feedback;
 
-public class ConexaoServidor implements Runnable {
+public class ConexaoServidor {
 
-	private Socket cliente;
-	private ProgressBar pBarFilaConversao;
-	private ProgressBar pBarFilaLeitura;
-	private String caminhoLeitura;
-	private String caminhoGravacao;
-	private TasksUpdate tasksUpdate;
-	
-	public ConexaoServidor(Socket cliente, ProgressBar pBarFilaLeitura, ProgressBar pBarFilaConversao,
-			String caminhoLeitura, String caminhoGravacao) {
-		this.cliente = cliente;
-		this.pBarFilaLeitura = pBarFilaLeitura;
-		this.pBarFilaConversao = pBarFilaConversao;
-		this.caminhoLeitura = caminhoLeitura;
-		this.caminhoGravacao = caminhoGravacao;
+	public ConexaoServidor() {
 	}
 
-	@Override
-	public void run() {
-		try {
-			tasksUpdate = new TasksUpdate(pBarFilaConversao, pBarFilaLeitura);
-			
-			PrintStream saida = new PrintStream(cliente.getOutputStream());
-
-			String caminhos = caminhoLeitura + ";" + caminhoGravacao;
-			saida.println(caminhos);			
-
-			while (!cliente.isClosed()) {
-
-				InputStream entrada = cliente.getInputStream();
-
-				if (entrada.available() > 0) {
-					byte[] arrBytes = new byte[3000];
-					entrada.read(arrBytes);
-
-					ByteArrayInputStream bos = new ByteArrayInputStream(arrBytes);
-					ObjectInputStream oos = new ObjectInputStream(bos);
-
-					Object obj = oos.readObject();
-
-					Feedback feedback = (Feedback) obj;
-					
-					System.out.println(feedback.toString());
-					
-					//tasksUpdate.updatePFilaBarLeitura(feedback.getPbarLeituraValor(), feedback.getTotalLinhas());
-					//tasksUpdate.updatePBarFilaConversao(feedback.getPbarLeituraValor(), feedback.getTotalLinhas());
-				} 
-			}					
-
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+	public void Conectar(String host, int porta, String caminhoLeitura, String caminhoGravacao, ProgressBar pBarFilaLeitura) {
+		Task<Void> conServidor = getTask(host, porta, caminhoLeitura, caminhoGravacao, pBarFilaLeitura);		
+		pBarFilaLeitura.progressProperty().bind(conServidor.progressProperty());
+		new Thread(conServidor).start();					
 	}
 
+	public Task<Void> getTask(String host, int porta, String caminhoLeitura, String caminhoGravacao, ProgressBar pBarFilaLeitura) {
+
+		return new Task<Void>() {
+			@Override
+			protected Void call() {
+
+				try {
+					
+					Socket cliente = new Socket(host, porta);
+
+					PrintStream saida = new PrintStream(cliente.getOutputStream());
+					saida.println(caminhoLeitura + ";" + caminhoGravacao);
+
+					InputStream entrada = cliente.getInputStream();
+					Feedback feedback = null;
+					while (!cliente.isClosed()) {
+						if (entrada.available() > 0) {
+							byte[] arrBytes = new byte[3000];
+							entrada.read(arrBytes);
+
+							ByteArrayInputStream bis = new ByteArrayInputStream(arrBytes);
+							ObjectInputStream ois = new ObjectInputStream(bis);
+
+							Object obj = ois.readObject();
+							feedback = (Feedback) obj;							
+							
+							System.out.println(feedback.toString());
+							
+							updateProgress(feedback.getPbarLeituraValor(), 1F);																				
+						}
+					}
+					
+					cliente.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}
+				
+				return null;
+			}
+		};
+
+	}
 }
