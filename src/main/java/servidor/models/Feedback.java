@@ -41,6 +41,10 @@ public class Feedback implements Serializable {
 		this.sizeFilaLeitura = sizeFilaLeitura;
 	}
 
+	public double getSizeFilaLeitura() { 
+		return this.sizeFilaLeitura;
+	}
+	
 	public void setSizeFilaParse(int sizeFilaParse) {
 		this.sizeFilaParse = sizeFilaParse;
 	}
@@ -50,7 +54,7 @@ public class Feedback implements Serializable {
 	}
 
 	public double getPbarLeituraValor() {
-		return this.sizeFilaLeitura;
+		return this.pBarLeituraValor;
 	}
 
 	public void setTotalLinhas(int totalLinhas) {

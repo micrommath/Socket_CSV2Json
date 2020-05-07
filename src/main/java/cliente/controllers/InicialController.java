@@ -133,7 +133,7 @@ public class InicialController implements Initializable {
 
 			// Conexao com o servidor
 			ConexaoServidor conexao = new ConexaoServidor();
-			conexao.Conectar(txtServer.getText(), Integer.parseInt(txtPorta.getText()), caminhoArquivo, caminhoArquivoSaida, progBarLeitura);			
+			conexao.Conectar(txtServer.getText(), Integer.parseInt(txtPorta.getText()), caminhoArquivo, caminhoArquivoSaida, progBarLeitura, txtaStatus);			
 			
 		} else {
 			Alerta(AlertType.WARNING, "Arquivo", "Falha",

@@ -114,8 +114,7 @@ public class ObservadorProgresso implements Runnable {
 	}
 
 	private void enviarFeedback() {
-		try {
-
+		try {			
 			Feedback feedback = new Feedback();
 
 			feedback.setTotalLinhas(totalLinhas);

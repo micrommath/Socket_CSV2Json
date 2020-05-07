@@ -9,6 +9,7 @@ import java.net.Socket;
 
 import javafx.concurrent.Task;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextArea;
 import servidor.models.Feedback;
 
 public class ConexaoServidor {
@@ -16,13 +17,14 @@ public class ConexaoServidor {
 	public ConexaoServidor() {
 	}
 
-	public void Conectar(String host, int porta, String caminhoLeitura, String caminhoGravacao, ProgressBar pBarFilaLeitura) {
-		Task<Void> conServidor = getTask(host, porta, caminhoLeitura, caminhoGravacao, pBarFilaLeitura);		
+	public void Conectar(String host, int porta, String caminhoLeitura, String caminhoGravacao, ProgressBar pBarFilaLeitura, TextArea txtaStatus) {
+		Task<Void> conServidor = getTask(host, porta, caminhoLeitura, caminhoGravacao);		
 		pBarFilaLeitura.progressProperty().bind(conServidor.progressProperty());
+		txtaStatus.textProperty().bind(conServidor.messageProperty());
 		new Thread(conServidor).start();					
 	}
 
-	public Task<Void> getTask(String host, int porta, String caminhoLeitura, String caminhoGravacao, ProgressBar pBarFilaLeitura) {
+	public Task<Void> getTask(String host, int porta, String caminhoLeitura, String caminhoGravacao) {
 
 		return new Task<Void>() {
 			@Override
@@ -37,7 +39,8 @@ public class ConexaoServidor {
 
 					InputStream entrada = cliente.getInputStream();
 					Feedback feedback = null;
-					while (!cliente.isClosed()) {
+					while (!cliente.isClosed()) {						
+						
 						if (entrada.available() > 0) {
 							byte[] arrBytes = new byte[3000];
 							entrada.read(arrBytes);
@@ -48,13 +51,14 @@ public class ConexaoServidor {
 							Object obj = ois.readObject();
 							feedback = (Feedback) obj;							
 							
-							System.out.println(feedback.toString());
+							updateProgress(feedback.getPbarLeituraValor(), 1F);
+							updateMessage(feedback.getStatusLeitura());
 							
-							updateProgress(feedback.getPbarLeituraValor(), 1F);																				
+							// Obj com informações retornadas do servidor
+							System.out.println(feedback.toString());
 						}
 					}
-					
-					cliente.close();
+									
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (ClassNotFoundException e) {
