@@ -56,6 +56,14 @@ public class Feedback implements Serializable {
 	public double getPbarLeituraValor() {
 		return this.pBarLeituraValor;
 	}
+	
+	public double getPbarConversaoValor() {
+		return this.pBarConversaoValor;
+	}
+	
+	public double getPbarGravacaoValor() {
+		return this.pBarGravacaoValor;
+	}
 
 	public void setTotalLinhas(int totalLinhas) {
 		this.totalLinhas = totalLinhas;		

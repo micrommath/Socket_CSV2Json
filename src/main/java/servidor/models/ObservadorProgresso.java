@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.nio.file.Path;
 
 import servidor.models.interfaces.InterfaceFilaConversao;
@@ -138,7 +139,10 @@ public class ObservadorProgresso implements Runnable {
 			oos.close();
 			bos.close();
 
-		} catch (IOException e) {
+		} catch(SocketException e) {
+			return;
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
